@@ -4,4 +4,5 @@ export * from './errors';
 export * from './helpers';
 export * from './loaders';
 export * from './middlewares';
+export * from './events';
 
