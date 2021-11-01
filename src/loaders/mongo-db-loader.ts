@@ -8,6 +8,7 @@ class MongoDbLoaderSrv {
       console.log('Connected to MongoDb');
     } catch (err) {
       console.error(err);
+      throw err;
     }
   }
 }
