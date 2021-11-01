@@ -1,3 +1,3 @@
-import { appConfig, AppConfig } from './app-config';
+import { msConfig, MSConfig } from './ms-config';
 
-export { appConfig, AppConfig };
+export { msConfig, MSConfig };
