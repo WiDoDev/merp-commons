@@ -5,7 +5,7 @@ class MongoDbLoaderSrv {
   public async init() {
     try {
       await mongoose.connect(msConfig.mongoDbUrl);
-      console.log('Connected to MongoDb');
+      console.log('---- Connected to MongoDb ----');
     } catch (err) {
       console.error(err);
       throw err;
