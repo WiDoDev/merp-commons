@@ -28,7 +28,24 @@ export class NatsEventService {
     await this.nc.publish(subject, encodedData);
   }
 
-  public async subscribe() {}
+  public async subscribe(subject: string, readerName: string) {
+
+    const js = this.nc.jetstream();
+
+    const subOptions = {
+      config: {
+        name: readerName,
+        durable_name: readerName,
+        ack_policy: AckPolicy.Explicit,
+      },
+    };
+
+    let sub = await js.subscribe(subject, subOptions);
+
+    return sub; // TODO use rxjs to create an observable
+
+  }
+  
   public async pullSubscribe() {}
 
   public async registerStreams(
