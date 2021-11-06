@@ -1,7 +1,19 @@
-import { JSONCodec, NatsConnection, AckPolicy, PullOptions } from "nats";
-import { MSEventInterface } from "./ms-event";
-import { natsConnectionService } from "./nats-connection-service";
-
+import {
+  JSONCodec,
+  NatsConnection,
+  Nanos,
+  ConsumerConfig,
+  consumerOpts,
+  JetStreamSubscription,
+} from 'nats';
+import { MSEventInterface } from './ms-event';
+import { natsConnectionService } from './nats-connection-service';
+export interface NatsSubscriptionOptions {
+  subject: string;
+  queueGroup: string;
+  ackWait?: Nanos;
+  config?: Partial<ConsumerConfig>;
+}
 export class NatsEventService {
   private static instance: NatsEventService;
 
@@ -28,24 +40,23 @@ export class NatsEventService {
     await this.nc.publish(subject, encodedData);
   }
 
-  public async subscribe(subject: string, readerName: string) {
-
+  public async subscribe(
+    options: NatsSubscriptionOptions
+  ): Promise<JetStreamSubscription> {
     const js = this.nc.jetstream();
 
-    const subOptions = {
-      config: {
-        name: readerName,
-        durable_name: readerName,
-        ack_policy: AckPolicy.Explicit,
-      },
-    };
+    const opts = consumerOpts({
+      ack_wait: options.ackWait || 30 * 10 ** 9, // 30s by default
+    });
+    opts.queue(options.queueGroup);
+    opts.durable(options.queueGroup);
+    opts.deliverTo(options.queueGroup);
+    opts.manualAck();
 
-    let sub = await js.subscribe(subject, subOptions);
-
-    return sub; // TODO use rxjs to create an observable
-
+    const res = await js.subscribe(options.subject, opts);
+    return res;
   }
-  
+
   public async pullSubscribe() {}
 
   public async registerStreams(
