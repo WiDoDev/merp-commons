@@ -5,9 +5,9 @@ import {
   ConsumerConfig,
   consumerOpts,
   JetStreamSubscription,
-} from 'nats';
-import { MSEventInterface } from './ms-event';
-import { natsConnectionService } from './nats-connection-service';
+} from "nats";
+import { MSEventInterface } from "./ms-event";
+import { natsConnectionService } from "./nats-connection-service";
 export interface NatsSubscriptionOptions {
   subject: string;
   queueGroup: string;
@@ -79,6 +79,16 @@ export class NatsEventService {
         name: name,
         subjects: subjects,
       });
+    } else {
+      // find a stream that stores a specific subject:
+      const name = await jsm.streams.find(globalSubject);
+
+      // retrieve info about the stream by its name
+      const si = await jsm.streams.info(name);
+
+      // update a stream configuration
+      si.config.subjects = subjects;
+      await jsm.streams.update(si.config);
     }
   }
 }
