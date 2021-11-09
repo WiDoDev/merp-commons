@@ -1,5 +1,6 @@
 import { ValidationChain, validationResult } from "express-validator";
 import { RequestValidationError } from "../errors";
+import { Request } from 'express';
 
 
 export const validateRequest = async (
