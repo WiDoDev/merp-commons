@@ -1,15 +1,12 @@
-import { CustomError } from './custom-error';
+import { BaseError } from './base-error';
 
-export class NotAuthorizedError extends CustomError {
-  statusCode = 401;
-
+export class NotAuthorizedError extends BaseError {
   constructor() {
-    super('Not Authorized');
-
+    super({
+      message: 'Not Authorized',
+      name: 'NotAuthorizedError',
+      code: 401,
+    });
     Object.setPrototypeOf(this, NotAuthorizedError.prototype);
-  }
-
-  serializeErrors() {
-    return [{ message: 'Not authorized' }];
   }
 }
