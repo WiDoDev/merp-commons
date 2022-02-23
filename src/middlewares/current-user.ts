@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
+import { AutenticationTokenError } from '../errors/authentication-token-error';
 
 interface UserPayload {
   userId: string;
@@ -26,15 +27,15 @@ export const currentUser = (JWTKey: string) => {
     }
   
     try {
-      console.log('HEADERS', req.headers);
       const token = req.headers?.authorization.replace('Bearer ', '');
-      console.log('JWT', token);
       const payload = verify(
         token,
         JWTKey,
       ) as UserPayload;
       req.currentUser = payload;
-    } catch (err) {}
+    } catch (err) {
+      throw new AutenticationTokenError();
+    }
   
     next();
   };
