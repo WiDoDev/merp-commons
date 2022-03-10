@@ -88,7 +88,7 @@ export class NatsEventService {
 
       // update a stream configuration
       si.config.subjects = subjects;
-      await jsm.streams.update(si.config);
+      await jsm.streams.update(name, si.config);
     }
   }
 }

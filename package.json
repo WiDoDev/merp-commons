@@ -30,6 +30,6 @@
     "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
-    "nats": "^2.2.0"
+    "nats": "^2.6.1"
   }
 }
