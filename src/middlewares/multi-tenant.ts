@@ -22,7 +22,9 @@ export const multiTenant = (multiTenantCheck?: MultiTenantValidationFn) => {
     next: NextFunction
   ): Promise<void> => {
     const { tenantId } = req.params;
-    // TODO verify Tenant
+    
+    // Check Callback that returns if the current 
+    // user has access to the tenant
     const check = multiTenantCheck
       ? await multiTenantCheck(req, res, next)
       : true;
