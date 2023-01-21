@@ -8,6 +8,8 @@ export interface MSConfig {
   msSignature: string;
   version: string;
   natsUrl: string;
+  kafkaClientId: string;
+  kafkaBrokers: string[];
 }
 
 export const msConfig: MSConfig = {
@@ -18,4 +20,8 @@ export const msConfig: MSConfig = {
   natsUrl: process.env.NATS_URL || '127.0.0.1:4222',
   msSignature: `${process.env.MS_NAME}.${randomBytes(3).toString('hex')}`,
   version: process.env.MS_VERSION || 'v0.0.1',
+  kafkaClientId: process.env.KAFKA_CLIENT_ID || process.env.MS_NAME || 'ms',
+  kafkaBrokers: process.env.KAFKA_BROKERS
+    ? process.env.KAFKA_BROKERS.split(',').map((url) => url.trim())
+    : ['localhost:9092'],
 };
